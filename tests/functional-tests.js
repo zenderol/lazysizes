@@ -124,6 +124,28 @@ window.lazyTests = {
 			});
 		});
 	}],
+	customSelector: ['lazyloads simple image in view with custom selector', function(assert){
+		var done = assert.async();
+		this.promise.always(function($){
+			var initialSrc = 'data:initial';
+			var lazySrc = 'data:,lazysrc';
+			var $topImage = $('<img />')
+				.attr({
+					src: initialSrc,
+					'data-src': lazySrc,
+					'data-foo':'LazyLoad'
+				}).appendTo('body')
+				;
+			assert.equal($topImage.attr('src'), initialSrc);
+
+			$topImage.on('lazybeforeunveil', function(){
+				afterUnveil(function(){
+					assert.equal($topImage.attr('src'), lazySrc);
+					done();
+				}, 140);
+			});
+		});
+	}],
 	autoSizesEvent: ['lazybeforesizes event allows modifying sizes attribute', function(assert){
 		var done = assert.async();
 
@@ -560,3 +582,8 @@ QUnit.test.apply(QUnit, lazyTests.autoSizesResize);
 QUnit.test.apply(QUnit, lazyTests.simplePicture);
 QUnit.test.apply(QUnit, lazyTests.simpleAutoSizesPicture);
 
+
+QUnit.module( "custom Selectors", {
+	beforeEach: createBeforeEach({cfg: {'lazySelector': "[data-foo='LazyLoad']"}})
+});
+QUnit.test.apply(QUnit, lazyTests.customSelector);

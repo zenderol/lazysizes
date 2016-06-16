@@ -501,7 +501,12 @@ function l(window, document) {
 		return {
 			_: function(){
 				started = Date.now();
-
+				
+				if(lazySizesConfig.lazySelector) {
+					[].map.call(document.querySelectorAll(lazySizesConfig.lazySelector), function(el) {
+						el.classList.add(lazySizesConfig.lazyClass);
+					});
+				}
 				lazyloadElems = document.getElementsByClassName(lazySizesConfig.lazyClass);
 				preloadElems = document.getElementsByClassName(lazySizesConfig.lazyClass + ' ' + lazySizesConfig.preloadClass);
 				hFac = lazySizesConfig.hFac;
@@ -617,6 +622,7 @@ function l(window, document) {
 
 		var lazySizesDefaults = {
 			lazyClass: 'lazyload',
+			lazySelector: '',
 			loadedClass: 'lazyloaded',
 			loadingClass: 'lazyloading',
 			preloadClass: 'lazypreload',

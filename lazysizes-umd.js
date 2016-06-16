@@ -509,7 +509,12 @@
 		return {
 			_: function(){
 				started = Date.now();
-
+				
+				if(lazySizesConfig.lazySelector) {
+					[].map.call(document.querySelectorAll(lazySizesConfig.lazySelector), function(el) {
+						el.classList.add(lazySizesConfig.lazyClass);
+					});
+				}
 				lazyloadElems = document.getElementsByClassName(lazySizesConfig.lazyClass);
 				preloadElems = document.getElementsByClassName(lazySizesConfig.lazyClass + ' ' + lazySizesConfig.preloadClass);
 				hFac = lazySizesConfig.hFac;
@@ -625,6 +630,7 @@
 
 		var lazySizesDefaults = {
 			lazyClass: 'lazyload',
+			lazySelector: '',
 			loadedClass: 'lazyloaded',
 			loadingClass: 'lazyloading',
 			preloadClass: 'lazypreload',
